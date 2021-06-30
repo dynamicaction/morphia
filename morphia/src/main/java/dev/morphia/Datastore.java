@@ -468,10 +468,8 @@ public interface Datastore {
     /**
      * @param clazz the class to use for mapping
      * @return the mapped collection for the collection
-     * @deprecated the return type for this method will change in 2.0
      * @morphia.internal
      */
-    @Deprecated
     DBCollection getCollection(Class<?> clazz);
 
     /**

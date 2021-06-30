@@ -331,7 +331,6 @@ public interface Query<T> extends QueryResults<T>, MongoIterable<T> {
      * @param sort the sort order to apply
      * @return this
      */
-    @Deprecated
     Query<T> order(Meta sort);
 
     /**
@@ -340,7 +339,6 @@ public interface Query<T> extends QueryResults<T>, MongoIterable<T> {
      * @param sorts the sort order to apply
      * @return this
      */
-    @Deprecated
     Query<T> order(Sort... sorts);
 
     /**
@@ -353,7 +351,6 @@ public interface Query<T> extends QueryResults<T>, MongoIterable<T> {
      * @return this
      * @see <a href="https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/">Project Fields to Return from Query</a>
      */
-    @Deprecated
     Query<T> project(String field, boolean include);
 
     /**
@@ -365,7 +362,6 @@ public interface Query<T> extends QueryResults<T>, MongoIterable<T> {
      * @see <a href="https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/">Project Fields to Return from Query</a>
      * @mongodb.driver.manual /reference/operator/projection/slice/ $slice
      */
-    @Deprecated
     Query<T> project(String field, ArraySlice slice);
 
     /**
@@ -376,7 +372,6 @@ public interface Query<T> extends QueryResults<T>, MongoIterable<T> {
      * @see <a href="https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/">Project Fields to Return from Query</a>
      * @mongodb.driver.manual reference/operator/projection/meta/ $meta
      */
-    @Deprecated
     Query<T> project(Meta meta);
 
     /**

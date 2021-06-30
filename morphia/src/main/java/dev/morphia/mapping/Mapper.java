@@ -69,10 +69,8 @@ import static java.lang.String.format;
 
 /**
  * @morphia.internal
- * @deprecated this class will be internalized in 2.0
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-@Deprecated
 public class Mapper {
     /**
      * The @{@link dev.morphia.annotations.Id} field name that is stored with mongodb.
