@@ -227,12 +227,7 @@ public class QueryImpl<T> implements CriteriaContainer, Query<T> {
 
     @Override
     public T first() {
-        final MongoCursor<T> iterator = iterator();
-        try {
-            return iterator.tryNext();
-        } finally {
-            iterator.close();
-        }
+        return first(getOptions());
     }
 
     @Override
