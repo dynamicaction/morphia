@@ -48,7 +48,9 @@ public class DefaultCreator implements ObjectFactory {
     private static <T> Constructor<T> getNoArgsConstructor(final Class<T> type) {
         try {
             final Constructor<T> constructor = type.getDeclaredConstructor();
-            constructor.setAccessible(true);
+            if (!SetAccessibleHelper.trySetAccessible(constructor)) {
+                throw new MappingException("Could not make constructor accessible for " + type.getName());
+            }
             return constructor;
         } catch (NoSuchMethodException e) {
             throw new MappingException("No usable constructor for " + type.getName(), e);
@@ -121,7 +123,9 @@ public class DefaultCreator implements ObjectFactory {
             }
             try {
                 final Constructor constructor = c.getDeclaredConstructor(argTypes);
-                constructor.setAccessible(true);
+                if (!SetAccessibleHelper.trySetAccessible(constructor)) {
+                    throw new MappingException("Could not make constructor accessible for " + c.getName());
+                }
                 return constructor.newInstance(args);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
@@ -187,8 +191,7 @@ public class DefaultCreator implements ObjectFactory {
      * creates an instance of testType (if it isn't Object.class or null) or fallbackType
      */
     private <T> T newInstance(final Constructor<T> tryMe, final Class<T> fallbackType) {
-        if (tryMe != null) {
-            tryMe.setAccessible(true);
+        if (tryMe != null && SetAccessibleHelper.trySetAccessible(tryMe)) {
             try {
                 return tryMe.newInstance();
             } catch (Exception e) {

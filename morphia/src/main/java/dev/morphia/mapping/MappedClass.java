@@ -261,7 +261,10 @@ public class MappedClass {
                 for (final ClassMethodPair cm : methodPairs) {
                     final Method method = cm.method;
                     final Object inst = toCall.get(cm.clazz);
-                    method.setAccessible(true);
+                    if (!SetAccessibleHelper.trySetAccessible(method)) {
+                        throw new MappingException("Count not make lifecycle method " + method.getName() +
+                                " accessible for " + cm.clazz.getName());
+                    }
 
                     if (LOG.isDebugEnabled()) {
                         LOG.debug(format("Calling lifecycle method(@%s %s) on %s", event.getSimpleName(), method, inst));
@@ -559,7 +562,11 @@ public class MappedClass {
         update();
 
         for (final java.lang.reflect.Field field : ReflectionUtils.getDeclaredAndInheritedFields(clazz, true)) {
-            field.setAccessible(true);
+            if (!SetAccessibleHelper.trySetAccessible(field)) {
+                // can't set accessible. skip this field.
+                continue;
+            }
+            
             final int fieldMods = field.getModifiers();
             if (!isIgnorable(field, fieldMods, mapper)) {
                 if (field.isAnnotationPresent(Id.class)) {

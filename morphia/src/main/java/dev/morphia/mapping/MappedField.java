@@ -107,7 +107,9 @@ public class MappedField {
     private List<String> loadNames; // List of stored names in order of trying, contains nameToStore and potential aliases
 
     MappedField(final Field f, final Class<?> clazz, final Mapper mapper) {
-        f.setAccessible(true);
+        if (!SetAccessibleHelper.trySetAccessible(f)) {
+            throw new MappingException("Could not make field " + f.getName() + " accessible for " + clazz.getName());
+        }
         field = f;
         persistedClass = clazz;
         realType = field.getType();
@@ -663,7 +665,7 @@ public class MappedField {
         for (final Annotation an : foundAnnotations.values()) {
             try {
                 final Method m = an.getClass().getMethod("concreteClass");
-                m.setAccessible(true);
+                SetAccessibleHelper.trySetAccessible(m);
                 final Object o = m.invoke(an);
                 //noinspection EqualsBetweenInconvertibleTypes
                 if (o != null && !(o.equals(Object.class))) {
@@ -686,7 +688,9 @@ public class MappedField {
         if (type != null) {
             try {
                 constructor = type.getDeclaredConstructor();
-                constructor.setAccessible(true);
+                if (!SetAccessibleHelper.trySetAccessible(constructor)) {
+                    throw new MappingException("Could not make constructor accessible for " + type.getName());
+                }
             } catch (NoSuchMethodException e) {
                 if (!hasAnnotation(ConstructorArgs.class)) {
                     if (LOG.isWarnEnabled()) {
@@ -706,7 +710,7 @@ public class MappedField {
             if (type != null) {
                 try {
                     constructor = type.getDeclaredConstructor();
-                    constructor.setAccessible(true);
+                    SetAccessibleHelper.trySetAccessible(constructor);
                 } catch (NoSuchMethodException e) {
                     // never mind.
                 } catch (SecurityException e) {
